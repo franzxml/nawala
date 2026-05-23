@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nawala</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            background: #eef3f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: #ffffff;
+            border: 1px solid #d9e2ec;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 18px 45px rgba(20, 35, 55, 0.12);
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: 28px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        p {
+            margin: 0 0 28px;
+            color: #5d6b7a;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .error {
+            margin-bottom: 20px;
+            padding: 12px 14px;
+            border: 1px solid #f0b4b4;
+            border-radius: 8px;
+            background: #fff1f1;
+            color: #9f2424;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3848;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            border: 1px solid #c8d3df;
+            border-radius: 8px;
+            padding: 12px;
+            background: #f8fafc;
+            color: #263545;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            border: 0;
+            border-radius: 8px;
+            padding: 13px 16px;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .note {
+            margin-top: 18px;
+            color: #6b7785;
+            font-size: 13px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Nawala</h1>
+        <p>Upload file PowerPoint berformat PPTX, lalu aplikasi akan mengubahnya menjadi PDF secara lokal.</p>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form action="/convert" method="post" enctype="multipart/form-data">
+            <label for="file">Pilih file PPTX</label>
+            <input id="file" name="file" type="file" accept=".pptx" required>
+            <button type="submit">Convert ke PDF</button>
+        </form>
+
+        <div class="note">File diproses di laptop ini dan tidak dikirim ke server eksternal.</div>
+    </main>
+</body>
+</html>

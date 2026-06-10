@@ -37,6 +37,7 @@ nawala/
 │   └── test_utils_files.py        Test helper file
 ├── temp/                          Direktori kerja sementara per konversi (dibuat otomatis)
 ├── .gitignore
+├── README.md
 ├── requirements.txt
 └── requirements-dev.txt           Dependency testing (pytest, httpx2)
 ```

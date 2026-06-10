@@ -1,4 +1,5 @@
-from typing import Optional, TypeGuard
+import logging
+from typing import Optional, TypeGuard, Union
 
 from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
@@ -15,6 +16,8 @@ from app.utils.files import (
     save_upload_file,
 )
 
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Nawala")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
@@ -34,7 +37,7 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @app.post("/convert", response_model=None)
-async def convert(request: Request, file: UploadFile = File(...)) -> HTMLResponse | FileResponse:
+async def convert(request: Request, file: UploadFile = File(...)) -> Union[HTMLResponse, FileResponse]:
     filename = file.filename
     if not is_valid_pptx(filename):
         await file.close()
@@ -65,6 +68,7 @@ async def convert(request: Request, file: UploadFile = File(...)) -> HTMLRespons
         cleanup_work_dir(work_dir)
         return render_index(request, str(exc))
     except Exception as exc:
+        logger.error("Unexpected error during conversion: %s", exc, exc_info=True)
         cleanup_work_dir(work_dir)
         return render_index(request, f"Terjadi error saat memproses file: {exc}")
     finally:

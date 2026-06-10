@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
@@ -21,13 +21,7 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 
 def render_index(request: Request, error: Optional[str] = None) -> HTMLResponse:
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "error": error,
-        },
-    )
+    return templates.TemplateResponse(request, "index.html", {"error": error})
 
 
 def is_valid_pptx(filename: Optional[str]) -> bool:
@@ -39,8 +33,8 @@ async def index(request: Request) -> HTMLResponse:
     return render_index(request)
 
 
-@app.post("/convert")
-async def convert(request: Request, file: UploadFile = File(...)):
+@app.post("/convert", response_model=None)
+async def convert(request: Request, file: UploadFile = File(...)) -> Union[HTMLResponse, FileResponse]:
     if not is_valid_pptx(file.filename):
         await file.close()
         return render_index(request, "File harus berformat .pptx.")
@@ -57,7 +51,7 @@ async def convert(request: Request, file: UploadFile = File(...)):
     input_path = get_safe_upload_path(work_dir, file.filename)
 
     try:
-        save_upload_file(file, input_path)
+        await save_upload_file(file, input_path)
         output_path = convert_pptx_to_pdf(libreoffice_path, input_path, work_dir)
 
         return FileResponse(

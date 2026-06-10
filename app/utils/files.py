@@ -21,7 +21,6 @@ def get_safe_upload_path(work_dir: Path, filename: str) -> Path:
     return work_dir / Path(filename).name
 
 
-def save_upload_file(upload_file: UploadFile, destination: Path) -> None:
-    with destination.open("wb") as buffer:
-        shutil.copyfileobj(upload_file.file, buffer)
-
+async def save_upload_file(upload_file: UploadFile, destination: Path) -> None:
+    content = await upload_file.read()
+    destination.write_bytes(content)

@@ -1,4 +1,4 @@
-from typing import Optional, TypeGuard, Union
+from typing import Optional, TypeGuard
 
 from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
@@ -34,7 +34,7 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @app.post("/convert", response_model=None)
-async def convert(request: Request, file: UploadFile = File(...)) -> Union[HTMLResponse, FileResponse]:
+async def convert(request: Request, file: UploadFile = File(...)) -> HTMLResponse | FileResponse:
     filename = file.filename
     if not is_valid_pptx(filename):
         await file.close()

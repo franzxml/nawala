@@ -17,16 +17,21 @@
 nawala/
 ├── app/
 │   ├── core/
+│   │   ├── __init__.py
 │   │   └── config.py              Konfigurasi path dan konstanta global
 │   ├── services/
+│   │   ├── __init__.py
 │   │   ├── converter.py           Logika konversi PPTX ke PDF via subprocess LibreOffice
 │   │   └── libreoffice.py         Deteksi path executable LibreOffice lintas OS
 │   ├── templates/
 │   │   └── index.html             Halaman utama upload file
 │   ├── utils/
+│   │   ├── __init__.py
 │   │   └── files.py               Helper manajemen file dan temp dir
+│   ├── __init__.py
 │   └── main.py                    Entry point FastAPI, definisi route
 ├── tests/
+│   ├── __init__.py
 │   ├── test_main.py               Test route HTTP
 │   ├── test_services_converter.py Test logika konversi
 │   └── test_utils_files.py        Test helper file

@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, TypeGuard, Union
 
 from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
@@ -24,7 +24,7 @@ def render_index(request: Request, error: Optional[str] = None) -> HTMLResponse:
     return templates.TemplateResponse(request, "index.html", {"error": error})
 
 
-def is_valid_pptx(filename: Optional[str]) -> bool:
+def is_valid_pptx(filename: Optional[str]) -> TypeGuard[str]:
     return bool(filename and filename.lower().endswith(ALLOWED_EXTENSION))
 
 
@@ -35,7 +35,8 @@ async def index(request: Request) -> HTMLResponse:
 
 @app.post("/convert", response_model=None)
 async def convert(request: Request, file: UploadFile = File(...)) -> Union[HTMLResponse, FileResponse]:
-    if not is_valid_pptx(file.filename):
+    filename = file.filename
+    if not is_valid_pptx(filename):
         await file.close()
         return render_index(request, "File harus berformat .pptx.")
 
@@ -48,7 +49,7 @@ async def convert(request: Request, file: UploadFile = File(...)) -> Union[HTMLR
         )
 
     work_dir = create_work_dir()
-    input_path = get_safe_upload_path(work_dir, file.filename)
+    input_path = get_safe_upload_path(work_dir, filename)
 
     try:
         await save_upload_file(file, input_path)

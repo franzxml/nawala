@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 venv/
 temp/
+.pytest_cache/
 .DS_Store
 Thumbs.db
 .idea/

@@ -1,117 +1,74 @@
 ## Fitur
-* Halaman utama dengan form upload file PPTX
-* Validasi file agar hanya menerima ekstensi `.pptx`
-* Konversi PPTX ke PDF menggunakan LibreOffice headless
-* Download otomatis file PDF setelah konversi berhasil
-* Penyimpanan file sementara di folder `temp`
-* Folder kerja unik untuk setiap proses konversi menggunakan UUID
-* Deteksi path LibreOffice otomatis untuk macOS, Windows, dan Linux
-* Pesan error yang jelas jika file bukan `.pptx`
-* Pesan error jika LibreOffice tidak ditemukan
-* Pesan error jika proses konversi gagal
-* Pesan error jika file PDF hasil konversi tidak terbentuk
-* Struktur backend yang modular dan mudah dipahami
-* Tampilan HTML dan CSS sederhana, bersih, dan modern
+
+- Upload file PPTX dari browser
+- Konversi PPTX ke PDF menggunakan LibreOffice secara lokal
+- File tidak dikirim ke server eksternal
 
 ## Teknologi
-* Python
-* FastAPI
-* Uvicorn
-* Jinja2
-* python-multipart
-* LibreOffice headless
-* HTML
-* CSS
-* pathlib
-* uuid
-* shutil
-* subprocess
+
+- **Runtime:** Python 3.14
+- **Backend:** FastAPI, Uvicorn
+- **Template engine:** Jinja2
+- **Konversi:** LibreOffice (soffice)
 
 ## Struktur Folder
-    nawala/
-    │── app/
-    │   ├── core/
-    │   │   ├── __init__.py
-    │   │   └── config.py
-    │   ├── services/
-    │   │   ├── __init__.py
-    │   │   ├── converter.py
-    │   │   └── libreoffice.py
-    │   ├── templates/
-    │   │   └── index.html
-    │   ├── utils/
-    │   │   ├── __init__.py
-    │   │   └── files.py
-    │   ├── __init__.py
-    │   └── main.py
-    │── .gitignore
-    │── README.md
-    └── requirements.txt
+
+```
+nawala/
+├── app/
+│   ├── core/
+│   │   └── config.py              Konfigurasi path dan konstanta global
+│   ├── services/
+│   │   ├── converter.py           Logika konversi PPTX ke PDF via subprocess LibreOffice
+│   │   └── libreoffice.py         Deteksi path executable LibreOffice lintas OS
+│   ├── templates/
+│   │   └── index.html             Halaman utama upload file
+│   ├── utils/
+│   │   └── files.py               Helper manajemen file dan temp dir
+│   └── main.py                    Entry point FastAPI, definisi route
+├── tests/
+│   ├── test_main.py               Test route HTTP
+│   ├── test_services_converter.py Test logika konversi
+│   └── test_utils_files.py        Test helper file
+├── requirements.txt
+└── requirements-dev.txt           Dependency testing (pytest, httpx2)
+```
 
 ## Cara Menjalankan
-1. **Persiapan Lingkungan:** Pastikan komputer sudah terinstal **Python**, **pip**, dan **LibreOffice**.
 
-2. **Masuk ke Folder Proyek:**
+**Prasyarat sistem:**
+```bash
+brew install libreoffice   # macOS
+sudo apt install libreoffice   # Ubuntu/Debian
+```
+
+1. Clone repositori:
    ```bash
-   cd nawala
+   git clone https://github.com/franzxml/nawala.git && cd nawala
    ```
 
-3. **Buat Virtual Environment Opsional:** Langkah ini opsional, tetapi direkomendasikan agar dependensi project terpisah dari Python sistem.
+2. Buat virtual environment dan install dependency:
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
-   ```
-
-   Untuk Windows:
-   ```bash
-   .venv\Scripts\activate
-   ```
-
-4. **Install Dependensi:**
-   ```bash
    pip install -r requirements.txt
    ```
 
-5. **Jalankan Aplikasi:**
+3. Jalankan aplikasi:
    ```bash
    uvicorn app.main:app --reload
    ```
 
-   Jika command `uvicorn` tidak terdeteksi, jalankan dengan:
-   ```bash
-   python3 -m uvicorn app.main:app --reload
-   ```
+4. Buka browser di `http://localhost:8000`
 
-6. **Akses Aplikasi Lokal:** Buka browser dan kunjungi:
-   ```bash
-   http://127.0.0.1:8000
-   ```
+## Scripts
 
-7. **Gunakan Converter:** Upload file `.pptx`, lalu klik tombol **Convert ke PDF**. Jika berhasil, file PDF akan langsung dikirim sebagai download.
+| Perintah | Keterangan |
+|---|---|
+| `uvicorn app.main:app --reload` | Jalankan di mode development |
+| `uvicorn app.main:app` | Jalankan di mode production |
+| `python -m pytest tests/ -v` | Jalankan seluruh test suite |
 
-## Script
-* `pip install -r requirements.txt` untuk menginstall dependensi aplikasi.
-* `uvicorn app.main:app --reload` untuk menjalankan aplikasi lokal dengan auto-reload.
-* `python3 -m uvicorn app.main:app --reload` sebagai alternatif jika command `uvicorn` tidak tersedia di PATH.
-* `python3 -m compileall -q app` untuk mengecek sintaks modul Python di folder `app`.
+## Pengembang
 
-## Catatan LibreOffice
-Aplikasi akan mencoba mendeteksi LibreOffice secara otomatis dari lokasi umum berikut:
-
-* macOS: `/Applications/LibreOffice.app/Contents/MacOS/soffice`
-* Windows: `C:\Program Files\LibreOffice\program\soffice.exe`
-* Windows: `C:\Program Files (x86)\LibreOffice\program\soffice.exe`
-* Linux atau PATH sistem: `libreoffice` atau `soffice`
-
-Jika LibreOffice tidak terdeteksi, install LibreOffice terlebih dahulu. Jika sudah terinstall tetapi tetap tidak terdeteksi, pastikan executable `libreoffice` atau `soffice` tersedia di PATH sistem.
-
-Untuk macOS dengan Homebrew, LibreOffice dapat diinstall menggunakan:
-```bash
-brew install --cask libreoffice
-```
-
----
-
-Dikembangkan oleh:
-
-* @franzxml
+- [franzxml](https://github.com/franzxml)

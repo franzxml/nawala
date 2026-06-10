@@ -5,7 +5,6 @@ from typing import Optional
 
 
 def find_libreoffice() -> Optional[str]:
-    """Cari executable LibreOffice berdasarkan sistem operasi."""
     system_name = platform.system()
 
     if system_name == "Darwin":

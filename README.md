@@ -64,6 +64,7 @@ sudo apt install libreoffice   # Ubuntu/Debian
    python3 -m venv .venv
    source .venv/bin/activate
    pip install -r requirements.txt
+   pip install -r requirements-dev.txt
    ```
 
 3. Jalankan aplikasi:

@@ -4,123 +4,595 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nawala</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23111110'/><text x='50%25' y='50%25' dy='.35em' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='%23f4f1ec'>N</text></svg>">
     <style>
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
+        [hidden] { display: none !important; }
+
         body {
-            margin: 0;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
-            color: #172033;
-            background: #eef3f8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0ece6;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 32px 24px;
         }
 
-        .card {
+        .wrap {
             width: 100%;
-            max-width: 460px;
+            max-width: 500px;
+        }
+
+        /* ── Toast ── */
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            animation: slideIn 0.2s ease;
+        }
+
+        .toast.success {
+            background: #f0faf4;
+            border: 1.5px solid #86efac;
+            color: #166534;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Card ── */
+        .card {
             background: #ffffff;
-            border: 1px solid #d9e2ec;
-            border-radius: 8px;
+            border: 1.5px solid #c9c4bc;
+            border-radius: 12px;
             padding: 32px;
-            box-shadow: 0 18px 45px rgba(20, 35, 55, 0.12);
         }
 
-        h1 {
-            margin: 0 0 12px;
-            font-size: 28px;
+        /* ── Card header ── */
+        .card-header {
+            margin-bottom: 24px;
+        }
+
+        .brand-tiny {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+
+        .brand-tiny-mark {
+            width: 24px;
+            height: 24px;
+            background: #111110;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-tiny-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b6762;
+            letter-spacing: -0.3px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0d0c0b;
+            letter-spacing: -0.8px;
             line-height: 1.2;
-            text-align: center;
+            margin-bottom: 8px;
         }
 
-        p {
-            margin: 0 0 28px;
-            color: #5d6b7a;
+        .page-desc {
+            font-size: 13.5px;
+            color: #6b6762;
             line-height: 1.6;
-            text-align: center;
         }
 
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            border-top: 1.5px solid #ede9e3;
+            margin: 24px 0;
+        }
+
+        /* ── Error ── */
         .error {
+            border-left: 3px solid #c41c1c;
+            background: #fff5f5;
+            padding: 11px 14px;
+            border-radius: 0 6px 6px 0;
+            color: #a01818;
+            font-size: 13.5px;
+            line-height: 1.55;
             margin-bottom: 20px;
-            padding: 12px 14px;
-            border: 1px solid #f0b4b4;
-            border-radius: 8px;
-            background: #fff1f1;
-            color: #9f2424;
-            font-size: 14px;
-            line-height: 1.5;
         }
 
-        label {
+        /* ── Upload zone ── */
+        .field-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #9b9590;
+            margin-bottom: 10px;
+        }
+
+        .upload-zone {
+            position: relative;
+            border: 1.5px dashed #bbb7b0;
+            border-radius: 10px;
+            padding: 36px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+            background: #faf9f7;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .upload-zone:hover,
+        .upload-zone:focus-within {
+            border-color: #0d0c0b;
+            border-style: solid;
+            background: #f3f0eb;
+        }
+
+        .upload-zone.has-file {
+            border-color: #0d0c0b;
+            border-style: solid;
+            background: #f3f0eb;
+            cursor: default;
+        }
+
+        .upload-zone.has-file input[type="file"] {
+            pointer-events: none;
+        }
+
+        /* Upload icon */
+        .upload-icon {
+            color: #c9c4bc;
+            margin-bottom: 14px;
+            transition: color 0.15s;
+        }
+
+        .upload-zone:hover .upload-icon,
+        .upload-zone:focus-within .upload-icon {
+            color: #6b6762;
+        }
+
+        .upload-primary {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1917;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .upload-secondary {
+            font-size: 13px;
+            color: #6b6762;
             display: block;
             margin-bottom: 8px;
-            color: #2c3848;
+        }
+
+        .upload-meta {
+            display: inline-block;
+            font-size: 11.5px;
+            color: #9b9590;
+            background: #ede9e3;
+            border-radius: 4px;
+            padding: 3px 8px;
+        }
+
+        /* File selected */
+        .file-check-icon {
+            color: #2a6e3f;
+            margin-bottom: 12px;
+        }
+
+        .file-name {
+            display: block;
+            font-size: 14px;
             font-weight: 700;
-            font-size: 14px;
+            color: #0d0c0b;
+            font-family: 'Courier New', 'Menlo', monospace;
+            word-break: break-all;
+            margin-bottom: 4px;
+            padding: 0 36px;
         }
 
-        input[type="file"] {
-            width: 100%;
-            border: 1px solid #c8d3df;
-            border-radius: 8px;
-            padding: 12px;
-            background: #f8fafc;
-            color: #263545;
-            font-size: 14px;
+        .file-size {
+            font-size: 12px;
+            color: #7a7671;
         }
 
-        button {
+        .clear-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            width: 26px;
+            height: 26px;
+            border: 1.5px solid #c9c4bc;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #6b6762;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.15s, background 0.15s, color 0.15s;
+            padding: 0;
+        }
+
+        .clear-btn:hover {
+            border-color: #c41c1c;
+            background: #fff5f5;
+            color: #c41c1c;
+        }
+
+        /* ── Button ── */
+        .btn {
             width: 100%;
-            margin-top: 20px;
-            border: 0;
-            border-radius: 8px;
-            padding: 13px 16px;
-            background: #2563eb;
-            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 9px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s ease, transform 0.2s ease;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: -0.2px;
+            border: 1.5px solid transparent;
         }
 
-        button:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
+        .btn:disabled {
+            background: #e6e2dc;
+            border-color: #e6e2dc;
+            color: #a09b95;
+            cursor: not-allowed;
         }
 
-        button:active {
-            transform: translateY(0);
+        .btn:not(:disabled) {
+            background: #0d0c0b;
+            border-color: #0d0c0b;
+            color: #f4f1ec;
         }
 
-        .note {
-            margin-top: 18px;
-            color: #6b7785;
-            font-size: 13px;
-            text-align: center;
+        .btn:not(:disabled):hover {
+            background: #d4521e;
+            border-color: #d4521e;
+            color: #ffffff;
+        }
+
+        .btn:not(:disabled):active {
+            background: #b84318;
+            border-color: #b84318;
+        }
+
+        .spinner {
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(244, 241, 236, 0.3);
+            border-top-color: #f4f1ec;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ── Trust row ── */
+        .trust {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1.5px solid #ede9e3;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #7a7671;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .trust-item svg {
+            flex-shrink: 0;
+            color: #9b9590;
+        }
+
+        .trust-sep {
+            width: 1.5px;
+            height: 20px;
+            background: #ede9e3;
+            flex-shrink: 0;
         }
     </style>
 </head>
 <body>
-    <main class="card">
-        <h1>Nawala</h1>
-        <p>Upload file PowerPoint berformat PPTX, lalu aplikasi akan mengubahnya menjadi PDF secara lokal.</p>
+    <div class="wrap">
 
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
+        <div id="toast" class="toast success" hidden>
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="toastText"></span>
+        </div>
 
-        <form action="/convert" method="post" enctype="multipart/form-data">
-            <label for="file">Pilih file PPTX</label>
-            <input id="file" name="file" type="file" accept=".pptx" required>
-            <button type="submit">Convert ke PDF</button>
-        </form>
+        <div class="card">
 
-        <div class="note">File diproses di laptop ini dan tidak dikirim ke server eksternal.</div>
-    </main>
+            <div class="card-header">
+                <div class="brand-tiny">
+                    <div class="brand-tiny-mark">
+                        <svg width="13" height="13" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 3L3 17L7 17L7 9L13 17L17 17L17 3L13 3L13 11L7 3L3 3Z" fill="#f4f1ec"/>
+                        </svg>
+                    </div>
+                    <span class="brand-tiny-name">Nawala</span>
+                </div>
+                <h1 class="page-title">Konversi PPTX ke PDF</h1>
+                <p class="page-desc">Diproses secara lokal di perangkat Anda.<br>File tidak dikirim ke server mana pun.</p>
+            </div>
+
+            <hr class="divider">
+
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+            <div id="inlineError" class="error" style="display:none;"></div>
+
+            <form id="form" action="/convert" method="post" enctype="multipart/form-data" novalidate>
+                <p class="field-label">File PPTX</p>
+
+                <div class="upload-zone" id="dropZone">
+                    <input id="file" name="file" type="file" accept=".pptx">
+
+                    <div id="uploadPrompt">
+                        <div class="upload-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="20" y1="31" x2="20" y2="13"/>
+                                <polyline points="13 20 20 13 27 20"/>
+                                <line x1="10" y1="31" x2="30" y2="31"/>
+                                <rect x="6" y="4" width="28" height="36" rx="3" stroke-dasharray="0" opacity="0.25"/>
+                            </svg>
+                        </div>
+                        <span class="upload-primary">Seret file PPTX ke sini</span>
+                        <span class="upload-secondary">atau klik untuk memilih file</span>
+                        <span class="upload-meta">.pptx &nbsp;·&nbsp; Maks 100 MB</span>
+                    </div>
+
+                    <div id="fileInfo" hidden>
+                        <div class="file-check-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M10 16l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span id="fileName" class="file-name"></span>
+                        <span id="fileSize" class="file-size"></span>
+                    </div>
+
+                    <button type="button" id="clearBtn" class="clear-btn" hidden aria-label="Hapus file">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn" disabled>
+                    <span class="spinner" id="spinner" hidden></span>
+                    <span id="btnText">Konversi ke PDF</span>
+                    <svg id="btnArrow" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="trust">
+                <div class="trust-item">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 2L3 4v4c0 3.3 2.1 5.8 5 6.9 2.9-1.1 5-3.6 5-6.9V4L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    Tanpa internet
+                </div>
+                <div class="trust-sep"></div>
+                <div class="trust-item">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                        <line x1="4" y1="9" x2="4.01" y2="9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="7" y1="9" x2="12" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    100% lokal
+                </div>
+                <div class="trust-sep"></div>
+                <div class="trust-item">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="7" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    File aman
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const fileInput    = document.getElementById('file');
+        const dropZone     = document.getElementById('dropZone');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const fileInfoEl   = document.getElementById('fileInfo');
+        const fileNameEl   = document.getElementById('fileName');
+        const fileSizeEl   = document.getElementById('fileSize');
+        const clearBtn     = document.getElementById('clearBtn');
+        const form         = document.getElementById('form');
+        const submitBtn    = document.getElementById('submitBtn');
+        const spinner      = document.getElementById('spinner');
+        const btnText      = document.getElementById('btnText');
+        const btnArrow     = document.getElementById('btnArrow');
+        const toast        = document.getElementById('toast');
+        const toastText    = document.getElementById('toastText');
+        const inlineError  = document.getElementById('inlineError');
+
+        const MAX_SIZE = 100 * 1024 * 1024;
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function showFile(file) {
+            if (!file.name.toLowerCase().endsWith('.pptx')) {
+                showInlineError('Hanya file .pptx yang didukung.');
+                clearFile();
+                return;
+            }
+            if (file.size > MAX_SIZE) {
+                showInlineError('Ukuran file melebihi batas 100 MB.');
+                clearFile();
+                return;
+            }
+            hideInlineError();
+            fileNameEl.textContent = file.name;
+            fileSizeEl.textContent = formatSize(file.size);
+            uploadPrompt.hidden = true;
+            fileInfoEl.hidden = false;
+            clearBtn.hidden = false;
+            dropZone.classList.add('has-file');
+            submitBtn.disabled = false;
+        }
+
+        function clearFile() {
+            fileInput.value = '';
+            uploadPrompt.hidden = false;
+            fileInfoEl.hidden = true;
+            clearBtn.hidden = true;
+            dropZone.classList.remove('has-file');
+            submitBtn.disabled = true;
+        }
+
+        function setLoading(on) {
+            submitBtn.disabled = on;
+            spinner.hidden = !on;
+            btnArrow.hidden = on;
+            btnText.textContent = on ? 'Mengonversi...' : 'Konversi ke PDF';
+        }
+
+        function showToast(message) {
+            toastText.textContent = message;
+            toast.hidden = false;
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => { toast.hidden = true; }, 5000);
+        }
+
+        function showInlineError(message) {
+            inlineError.textContent = message;
+            inlineError.style.display = 'block';
+        }
+
+        function hideInlineError() {
+            inlineError.style.display = 'none';
+        }
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) showFile(file);
+            else clearFile();
+        });
+
+        clearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearFile();
+            hideInlineError();
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!fileInput.files.length) return;
+
+            hideInlineError();
+            setLoading(true);
+
+            try {
+                const res = await fetch('/convert', {
+                    method: 'POST',
+                    body: new FormData(form),
+                });
+
+                const contentType = res.headers.get('content-type') || '';
+
+                if (contentType.includes('application/pdf')) {
+                    const cd = res.headers.get('content-disposition') || '';
+                    const match = cd.match(/filename[*]?=(?:UTF-8''|"?)([^";\n]+)/i);
+                    const filename = match ? decodeURIComponent(match[1].replace(/"/g, '')) : 'nawala.pdf';
+
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                    showToast('Berhasil. Unduhan dimulai.');
+                    clearFile();
+                } else {
+                    const html = await res.text();
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const errorText = doc.querySelector('.error')?.textContent?.trim()
+                        || 'Terjadi kesalahan saat memproses file.';
+                    showInlineError(errorText);
+                }
+            } catch {
+                showInlineError('Tidak dapat terhubung ke server.');
+            } finally {
+                setLoading(false);
+            }
+        });
+    </script>
 </body>
 </html>

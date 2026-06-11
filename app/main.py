@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, TypeGuard, Union
+from typing import TypeGuard
 
 from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
@@ -23,11 +23,11 @@ app = FastAPI(title="Nawala")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 
-def render_index(request: Request, error: Optional[str] = None) -> HTMLResponse:
+def render_index(request: Request, error: str | None = None) -> HTMLResponse:
     return templates.TemplateResponse(request, "index.html", {"error": error})
 
 
-def is_valid_pptx(filename: Optional[str]) -> TypeGuard[str]:
+def is_valid_pptx(filename: str | None) -> TypeGuard[str]:
     return bool(filename and filename.lower().endswith(ALLOWED_EXTENSION))
 
 
@@ -37,7 +37,7 @@ async def index(request: Request) -> HTMLResponse:
 
 
 @app.post("/convert", response_model=None)
-async def convert(request: Request, file: UploadFile = File(...)) -> Union[HTMLResponse, FileResponse]:
+async def convert(request: Request, file: UploadFile = File(...)) -> HTMLResponse | FileResponse:
     filename = file.filename
     if not is_valid_pptx(filename):
         await file.close()

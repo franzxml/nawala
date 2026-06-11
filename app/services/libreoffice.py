@@ -1,10 +1,9 @@
 import platform
 import shutil
 from pathlib import Path
-from typing import Optional
 
 
-def find_libreoffice() -> Optional[str]:
+def find_libreoffice() -> str | None:
     system_name = platform.system()
 
     if system_name == "Darwin":

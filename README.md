@@ -36,7 +36,11 @@ nawala/
 │   ├── test_services_converter.py Test logika konversi
 │   └── test_utils_files.py        Test helper file
 ├── temp/                          Direktori kerja sementara per konversi (dibuat otomatis)
+├── .editorconfig
 ├── .gitignore
+├── .vscode/
+│   ├── extensions.json            Rekomendasi ekstensi VS Code
+│   └── settings.json              Konfigurasi editor (format on save, interpreter path)
 ├── README.md
 ├── requirements.txt
 └── requirements-dev.txt           Dependency testing (pytest, httpx2)

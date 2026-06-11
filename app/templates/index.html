@@ -63,7 +63,7 @@
 
         /* ── Card header ── */
         .card-header {
-            margin-bottom: 24px;
+            margin-bottom: 12px;
         }
 
         .brand-tiny {
@@ -76,7 +76,7 @@
         .brand-tiny-mark {
             width: 24px;
             height: 24px;
-            background: #111110;
+            background: #2d2218;
             border-radius: 5px;
             display: flex;
             align-items: center;
@@ -97,20 +97,13 @@
             color: #0d0c0b;
             letter-spacing: -0.8px;
             line-height: 1.2;
-            margin-bottom: 8px;
+            margin-bottom: 14px;
         }
 
         .page-desc {
             font-size: 13.5px;
-            color: #6b6762;
+            color: #3d3a37;
             line-height: 1.6;
-        }
-
-        /* ── Divider ── */
-        .divider {
-            border: none;
-            border-top: 1.5px solid #ede9e3;
-            margin: 24px 0;
         }
 
         /* ── Error ── */
@@ -126,24 +119,15 @@
         }
 
         /* ── Upload zone ── */
-        .field-label {
-            font-size: 10.5px;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: #9b9590;
-            margin-bottom: 10px;
-        }
-
         .upload-zone {
             position: relative;
-            border: 1.5px dashed #bbb7b0;
+            border: 2px dashed #b5a99a;
             border-radius: 10px;
-            padding: 36px 24px;
+            padding: 28px 24px;
             text-align: center;
             cursor: pointer;
-            transition: border-color 0.15s, background 0.15s;
-            background: #faf9f7;
+            transition: border-color 0.2s, background 0.2s;
+            background: #f5f0e8;
             margin-bottom: 14px;
             overflow: hidden;
         }
@@ -160,15 +144,13 @@
 
         .upload-zone:hover,
         .upload-zone:focus-within {
-            border-color: #0d0c0b;
-            border-style: solid;
-            background: #f3f0eb;
+            border-color: #6b6762;
+            background: #ede8df;
         }
 
         .upload-zone.has-file {
             border-color: #0d0c0b;
-            border-style: solid;
-            background: #f3f0eb;
+            background: #ede8df;
             cursor: default;
         }
 
@@ -277,9 +259,9 @@
         }
 
         .btn:disabled {
-            background: #e6e2dc;
-            border-color: #e6e2dc;
-            color: #a09b95;
+            background: #d8d3cc;
+            border-color: #d8d3cc;
+            color: #857f79;
             cursor: not-allowed;
         }
 
@@ -314,37 +296,36 @@
             to { transform: rotate(360deg); }
         }
 
+        /* ── Button hint ── */
+        .btn-hint {
+            font-size: 12px;
+            color: #9b9590;
+            text-align: center;
+            margin-top: 8px;
+        }
+
         /* ── Trust row ── */
         .trust {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0;
-            padding-top: 20px;
-            margin-top: 20px;
-            border-top: 1.5px solid #ede9e3;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
         }
 
         .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            color: #7a7671;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .trust-item svg {
-            flex-shrink: 0;
-            color: #9b9590;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #2d2a27;
+            background: #f5f0e8;
+            border: 1px solid #d9d4cc;
+            border-radius: 20px;
+            padding: 5px 12px;
         }
 
         .trust-sep {
-            width: 1.5px;
-            height: 20px;
-            background: #ede9e3;
-            flex-shrink: 0;
+            display: none;
         }
     </style>
 </head>
@@ -374,7 +355,13 @@
                 <p class="page-desc">Diproses secara lokal di perangkat Anda.<br>File tidak dikirim ke server mana pun.</p>
             </div>
 
-            <hr class="divider">
+            <div class="trust">
+                <div class="trust-item">Hasil: PDF</div>
+                <div class="trust-item">100% lokal</div>
+                <div class="trust-item">File aman</div>
+            </div>
+
+            <hr style="border:none;border-top:1.5px solid #ede9e3;margin:20px 0">
 
             {% if error %}
                 <div class="error">{{ error }}</div>
@@ -382,14 +369,12 @@
             <div id="inlineError" class="error" style="display:none;"></div>
 
             <form id="form" action="/convert" method="post" enctype="multipart/form-data" novalidate>
-                <p class="field-label">File PPTX</p>
-
                 <div class="upload-zone" id="dropZone">
                     <input id="file" name="file" type="file" accept=".pptx">
 
                     <div id="uploadPrompt">
                         <div class="upload-icon">
-                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="52" height="52" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="20" y1="31" x2="20" y2="13"/>
                                 <polyline points="13 20 20 13 27 20"/>
                                 <line x1="10" y1="31" x2="30" y2="31"/>
@@ -427,33 +412,8 @@
                         <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
+                <p id="btnHint" class="btn-hint">Upload file terlebih dahulu</p>
             </form>
-
-            <div class="trust">
-                <div class="trust-item">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 2L3 4v4c0 3.3 2.1 5.8 5 6.9 2.9-1.1 5-3.6 5-6.9V4L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    </svg>
-                    Tanpa internet
-                </div>
-                <div class="trust-sep"></div>
-                <div class="trust-item">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-                        <line x1="4" y1="9" x2="4.01" y2="9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <line x1="7" y1="9" x2="12" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                    100% lokal
-                </div>
-                <div class="trust-sep"></div>
-                <div class="trust-item">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="7" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                    File aman
-                </div>
-            </div>
 
         </div>
     </div>
@@ -474,6 +434,7 @@
         const toast        = document.getElementById('toast');
         const toastText    = document.getElementById('toastText');
         const inlineError  = document.getElementById('inlineError');
+        const btnHint      = document.getElementById('btnHint');
 
         const MAX_SIZE = 100 * 1024 * 1024;
 
@@ -502,6 +463,8 @@
             clearBtn.hidden = false;
             dropZone.classList.add('has-file');
             submitBtn.disabled = false;
+            btnHint.textContent = 'File PDF akan diunduh otomatis setelah konversi.';
+            btnHint.hidden = false;
         }
 
         function clearFile() {
@@ -511,6 +474,8 @@
             clearBtn.hidden = true;
             dropZone.classList.remove('has-file');
             submitBtn.disabled = true;
+            btnHint.textContent = 'Upload file terlebih dahulu';
+            btnHint.hidden = false;
         }
 
         function setLoading(on) {
@@ -518,6 +483,7 @@
             spinner.hidden = !on;
             btnArrow.hidden = on;
             btnText.textContent = on ? 'Mengonversi...' : 'Konversi ke PDF';
+            btnHint.hidden = true;
         }
 
         function showToast(message) {
